@@ -164,8 +164,8 @@ static const NSString *oauthSignatureMethodName[] = {
     [_oAuthValues enumerateKeysAndObjectsUsingBlock:^(id key, NSString *obj, BOOL *stop) {
         if ([key hasPrefix:@"oauth_"]  && ![key isEqualToString:@"oauth_signature"] && obj && ![obj isEqualToString:@""]) {
             [parameters addObject:@{
-                @"key": [key mk_urlEncodedString],
-                @"value": [obj mk_urlEncodedString]
+                @"key": [key urlEncodedString],
+                @"value": [obj urlEncodedString]
             }];
         }
     }];
@@ -187,8 +187,8 @@ static const NSString *oauthSignatureMethodName[] = {
     // Create the signature base string
     NSString *signatureBaseString = [NSString stringWithFormat:@"%@&%@&%@",
                                      [method uppercaseString],
-                                     [url mk_urlEncodedString],
-                                     [[normalizedParameters componentsJoinedByString:@"&"] mk_urlEncodedString]];
+                                     [url urlEncodedString],
+                                     [[normalizedParameters componentsJoinedByString:@"&"] urlEncodedString]];
     
     return signatureBaseString;
 }
@@ -220,12 +220,12 @@ static const NSString *oauthSignatureMethodName[] = {
             [request.readonlyPostDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
                 if([obj isKindOfClass:[NSString class]]) {
                     [parameters addObject:@{
-                        @"key": [key mk_urlEncodedString],
-                        @"value": [obj mk_urlEncodedString]
+                        @"key": [key urlEncodedString],
+                        @"value": [obj urlEncodedString]
                      }];
                 } else {
                     [parameters addObject:@{
-                        @"key": [key mk_urlEncodedString],
+                        @"key": [key urlEncodedString],
                         @"value": [NSString stringWithFormat:@"%@", obj]
                      }];
                 }
@@ -239,8 +239,8 @@ static const NSString *oauthSignatureMethodName[] = {
 - (NSString *)generatePlaintextSignatureFor:(NSString *)baseString
 {
     return [NSString stringWithFormat:@"%@&%@", 
-            self.consumerSecret != nil ? [self.consumerSecret mk_urlEncodedString] : @"", 
-            self.tokenSecret != nil ? [self.tokenSecret mk_urlEncodedString] : @""];
+            self.consumerSecret != nil ? [self.consumerSecret urlEncodedString] : @"", 
+            self.tokenSecret != nil ? [self.tokenSecret urlEncodedString] : @""];
 }
 
 - (NSString *)generateHMAC_SHA1SignatureFor:(NSString *)baseString
@@ -384,7 +384,7 @@ static const NSString *oauthSignatureMethodName[] = {
         
         [_oAuthValues enumerateKeysAndObjectsUsingBlock:^(id key, NSString *obj, BOOL *stop) {
             if (obj && ![obj isEqualToString:@""]) {
-                [oauthHeaders addObject:[NSString stringWithFormat:@"%@=\"%@\"", [key mk_urlEncodedString], [obj mk_urlEncodedString]]];
+                [oauthHeaders addObject:[NSString stringWithFormat:@"%@=\"%@\"", [key urlEncodedString], [obj urlEncodedString]]];
             }
         }];
         
@@ -405,7 +405,7 @@ static const NSString *oauthSignatureMethodName[] = {
         // Fill the authorization header array
         [_oAuthValues enumerateKeysAndObjectsUsingBlock:^(id key, NSString *obj, BOOL *stop) {
             if (obj && ![obj isEqualToString:@""]) {
-                [oauthParams addObject:[NSString stringWithFormat:@"%@=%@", [key mk_urlEncodedString], [obj mk_urlEncodedString]]];
+                [oauthParams addObject:[NSString stringWithFormat:@"%@=%@", [key urlEncodedString], [obj urlEncodedString]]];
             }
         }];        
 
@@ -449,7 +449,7 @@ static const NSString *oauthSignatureMethodName[] = {
     // Fill the authorization header array
     [_oAuthValues enumerateKeysAndObjectsUsingBlock:^(id key, NSString *obj, BOOL *stop) {
         if (obj && ![obj isEqualToString:@""]) {
-            [oauthHeaders addObject:[NSString stringWithFormat:@"%@=\"%@\"", [key mk_urlEncodedString], [obj mk_urlEncodedString]]];
+            [oauthHeaders addObject:[NSString stringWithFormat:@"%@=\"%@\"", [key urlEncodedString], [obj urlEncodedString]]];
         }
     }];
     
